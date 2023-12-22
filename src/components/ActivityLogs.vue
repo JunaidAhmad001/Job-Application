@@ -3,6 +3,7 @@
   <div class="user-list q-pa-md">
     <h6>Applicant List</h6>
     <q-table
+      
       :rows="logData"
       :columns="headers"
       row-key="jobId"

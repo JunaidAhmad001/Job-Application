@@ -16,7 +16,7 @@
         >
           <template v-slot:prepend>
             <q-icon
-              name="password"
+              :name="showPassword ? 'visibility_off' : 'visibility'"
               class="text-indigo q-ml-md"
               @click="togglePasswordVisibility"
             />
@@ -29,13 +29,13 @@
           counter
           class="q-mb-md"
           style="width: 100%"
-          :type="showPassword ? 'text' : 'password'"
+          :type="showConfirmPassword ? 'text' : 'password'"
         >
           <template v-slot:prepend>
             <q-icon
-              name="password"
+              :name="showConfirmPassword ? 'visibility_off' : 'visibility'"
               class="text-indigo q-ml-md"
-              @click="togglePasswordVisibility"
+              @click="toggleConfirmPasswordVisibility"
             />
           </template>
         </q-input>
@@ -55,18 +55,24 @@
 <script setup>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
-// import axios from "axios";
 import instance from "../helper/http-config";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
 const route = useRoute();
 const $q = useQuasar();
 const password = ref("");
-
 const confirmPassword = ref("");
 const passwordMismatch = ref("");
 const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
+};
+
+const toggleConfirmPasswordVisibility = () => {
+  showConfirmPassword.value = !showConfirmPassword.value;
 };
 const setPassword = async () => {
   // console.log(route.params.email);
@@ -102,12 +108,14 @@ const setPassword = async () => {
       );
       // console.log('Response Data:', response.data[0].token);
 
-      if (response.body.status) {
+      if (response.data.status=='Success') {
+        
         $q.notify({
           message: "Password set succesfully!",
           color: "blue",
           type: "green",
         });
+        router.push('/');
         // Check if the response indicates success, but not necessarily if credentials are correct
         // const token = response.data.token;
         // const token = response.data.data.token;
@@ -123,14 +131,15 @@ const setPassword = async () => {
             type: "negative",
           });
         } else {
-          console.error("Login failed. Please check your credentials.");
-        }
-
-        $q.notify({
+          
+             $q.notify({
           message: "Invalid Credentials!",
           color: "red",
           type: "negative",
         });
+        }
+
+     
       }
     } catch (error) {
       // Handle different types of errors
@@ -144,6 +153,7 @@ const setPassword = async () => {
   }
 };
 </script>
+
 <style scoped>
 .forgot-page {
   background-size: cover;

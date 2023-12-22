@@ -1,8 +1,8 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md forgot-page">
-    <q-card class="inset-shadow-down">
-      <q-card-section class="bg-white text-black text-center">
-        <div class="text-h6">Set Password</div>
+  <div class="q-pa-md row items-start q-gutter-md set-password bg-indigo-1">
+    <q-card class="inset-shadow-down my-card">
+      <q-card-section class="bg-white text-indigo text-center">
+        <div class="text-h6">Set New Password</div>
       </q-card-section>
       <form @submit.prevent="setPassword" class="bg-white">
         <q-input
@@ -24,7 +24,7 @@
         </q-input>
         <q-input
           bottom-slots
-          v-model="confirmPassword"
+          v-model="newPassword"
           label="Enter New Password"
           counter
           class="q-mb-md"
@@ -33,7 +33,7 @@
         >
           <template v-slot:prepend>
             <q-icon
-              name="Confirm New Password"
+              name="password"
               class="text-indigo q-ml-md"
               @click="togglePasswordVisibility"
             />
@@ -41,7 +41,7 @@
         </q-input>
         <q-input
           bottom-slots
-          v-model="newConfirmPassword"
+          v-model="confirmPassword"
           label="Confirm Password"
           counter
           class="q-mb-md"
@@ -72,22 +72,28 @@
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import instance from "../helper/http-config";
-import { useRoute } from 'vue-router';
+import {useAppStore} from "../store/index";
+// import { useRoute } from 'vue-router';
 
-const password = ref("");
+const store=useAppStore();
+
 const oldPassword = ref("");
 const confirmPassword = ref("");
-const newConfirmPassword = ref("");
+const newPassword = ref("");
 const showPassword = ref(false);
 const $q = useQuasar();
-const route = useRoute();
+// const route = useRoute();
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
-
+const resetForm=()=>{
+ oldPassword.value = ref("");
+ confirmPassword.value = ref("");
+ newPassword.value = ref("");
+}
 const setPassword = async () => {
-  if (confirmPassword.value !== newConfirmPassword.value) {
+  if (confirmPassword.value !== newPassword.value) {
     $q.notify({
       message: "Please verify confirm password.",
       color: "red",
@@ -96,7 +102,7 @@ const setPassword = async () => {
   } else if (
     oldPassword.value === null ||
     confirmPassword.value === null ||
-    newConfirmPassword.value === null
+    newPassword.value === null
   ) {
     $q.notify({
       message: "Please fill all the fields.",
@@ -104,21 +110,30 @@ const setPassword = async () => {
       type: "warning",
     });
   } else {
+    const token=store.getToken()
     try {
       const response = await instance.post(
-        `/setPassword/${route.params.email}`,
+        `/change-password`,
         {
-          password: password.value,
+
+          oldPassword: oldPassword.value,
+          newPassword: newPassword.value,
           confirmPassword: confirmPassword.value,
-        }
+        },
+         {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
       );
 
-      if (response.body.status) {
+      if (response.data.status=="Success") {
         $q.notify({
           message: "Password set successfully!",
           color: "blue",
           type: "positive",
         });
+        resetForm();
       } else {
         if (response && response.data.error) {
           $q.notify({
@@ -131,7 +146,6 @@ const setPassword = async () => {
         }
       }
     } catch (error) {
-      console.error("Password setting failed:", error.message);
       $q.notify({
         message: "Password setting failed. Please try again.",
         color: "red",
@@ -141,3 +155,26 @@ const setPassword = async () => {
   }
 };
 </script>
+
+<style scoped>
+.set-password {
+  background-size: cover;
+  background-position: center;
+  height: 80vh; /* Set height to 100% of the viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: calc(100vh + 2.7vh); */
+}
+.my-card {
+  max-width: 400px; /* Set a maximum width for larger screens */
+  width: 100%;
+  margin: auto; /* Center the card horizontally */
+}
+
+@media (max-width: 599px) {
+  .my-card {
+    max-width: 400px;
+  }
+}
+</style>

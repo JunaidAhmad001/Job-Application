@@ -163,15 +163,18 @@ export default {
     const store = useAppStore();
     const drawer = ref(false);
     const miniState = ref(false);
+    const token=ref(false);
     // Use computed to define adminLoggedIn as a computed property
     const adminLoggedIn = computed(() => store.adminLoggedIn);
-
+   
+    
     // Use logOut method to dispatch the 'logoutAdmin' action and navigate to 'LoginPage'
     const logOut = () => {
       // store.dispatch('logoutAdmin'); // Corrected action name
       // Use router from the composition API instead of this.$router
       // Import the router using the 'router' import
-      router.push("/");
+       store.setToken(token.value);
+     router.push("/");
     };
 
     // Return the computed property and methods for use in the template

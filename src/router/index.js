@@ -37,12 +37,18 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/ConfirmPass/:email",
+    name: "ConfirmPass",
+    component: ConfirmPass,
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/UserDashboard",
     name: "UserDashboard",
     component: UserDashboard,
     meta: { requiresAuth: true },
         children: [
-          { path: "ConfirmPass/:email", component: ConfirmPass},
+          // { path: "ConfirmPass/:email", component: ConfirmPass},
           { path: "SetNewPass", component: SetNewPass},
           { path: "UserList", component: UserList },
 
@@ -52,7 +58,7 @@ const routes = [
     path: "/AdminDashboard",
     component: AdminDashboard,
     name: "AdminDashboard",
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, },
     children: [
       { path: "CreateUser", component: CreateUser , meta: {requiresAuth:true}},
       { path: "CreatedList", component: CreatedList , meta: {requiresAuth:true}},
@@ -71,12 +77,34 @@ router.beforeEach((to, from, next) => {
   const store = useAppStore();
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  if (requiresAuth && !store.adminLoggedIn) {
-    // Redirect to login page if not logged in
-    next({ name: "LoginPage" });
+  if (requiresAuth) {
+    // Check if user is logged in
+    if (!store.adminLoggedIn && !store.token=='' ) {
+      // Redirect to login page if not logged in
+      next({ name: "LoginPage" });
+    } else {
+
+      // Check if the route requires admin role
+      if (to.matched.some((record) => record.meta.requiresAdmin)) {
+        if (store.adminLoggedIn) {
+          // User is logged in as admin, allow access
+          next();
+        } else {
+          // Redirect to login page if not an admin
+          next({ name: "LoginPage" });
+        }
+      } else {
+        // Allow access to routes that don't require admin role
+        next();
+      }
+    }
   } else {
+    // Allow access to routes that don't require authentication
     next();
   }
 });
+
+
+
 
 export default router;

@@ -127,8 +127,8 @@
 <script setup>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
-// import instance from "../helper/http-config";
-import axios from "axios";
+import instance from "../helper/http-config";
+// import axios from "axios";
 // import { useAppStore } from "../store/index";
 // import axios from "axios";
 
@@ -194,7 +194,7 @@ const submitForm = async () => {
     formData.append("cv", user.value.cv);
     try {
       // Use axios or fetch to send the FormData to the backend
-      const response = await axios.post("http://192.168.11.179:8080/api/job/apply-job", formData, {
+      const response = await instance.post("/submit-form", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
