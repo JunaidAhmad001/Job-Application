@@ -1,8 +1,7 @@
 <!-- AdminDashboard.vue -->
 <template>
-
   <!-- SideBar for quasar -->
-  <div class="q-lg ">
+  <div class="q-lg">
     <q-layout
       view="hHh Lpr lff"
       container
@@ -30,6 +29,16 @@
             flat
             round
             dense
+            title="Set Passwoord"
+            icon="person"
+            @click="settingUser"
+            class="text-black q-ml"
+          />
+          <q-btn
+            flat
+            round
+            dense
+            title="Logout"
             icon="logout"
             @click="logOut"
             class="text-black"
@@ -38,79 +47,31 @@
       </q-header>
 
       <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="500">
-        <q-scroll-area class="fit bg-indigo-10 rounded-borders ">
+        <q-scroll-area class="fit bg-indigo-10 rounded-borders">
           <q-list padding class="menu-list bg-indigo-10 q-mt-lg">
-            <!-- <q-item clickable v-ripple to="/AdminDashboard/CreateUser"   :active-class="'active-class'">
+            <q-item
+              clickable
+              v-ripple
+              to="/UserDashboard/UserList"
+              :active-class="'active-class'"
+            >
               <q-item-section>
-                <q-icon
-                  name="create"
-                  color="black"
-
-                />
+                <q-icon name="table" color="white" />
               </q-item-section>
-              <q-item-section>
-             Create User
-              </q-item-section>
-            </q-item> -->
-            <q-item clickable v-ripple to="/UserDashboard/UserList" :active-class="'active-class'">
-              <q-item-section>
-                <q-icon
-                  name="table"
-                  color="white"
-                />
-              </q-item-section>
-              <q-item-section>
-            Applicant UserList
-              </q-item-section>
+              <q-item-section class="text-white"> Applicant UserList </q-item-section>
             </q-item>
-            <q-item clickable v-ripple to="/UserDashboard/SetNewPass"   :active-class="'active-class'">
-              <q-item-section>
-                <q-icon
-                  name="create"
-                  color="white"
-
-                />
-              </q-item-section>
-              <q-item-section>
-             Change Password
-              </q-item-section>
-            </q-item>
-            <!-- <q-item clickable v-ripple to="/AdminDashboard/ActivityLogs" :active-class="'active-class'">
-              <q-item-section>
-                <q-icon
-                  name="checklist"
-                  color="black"
-                />
-              </q-item-section>
-              <q-item-section>
-             ActivityLogs
-              </q-item-section>
-            </q-item> -->
-            <!-- <q-item clickable v-ripple to="/AdminDashboard/CreatedList" :active-class="'active-class'">
-              <q-item-section>
-                <q-icon
-                  name="list"
-                  color="black"
-                />
-              </q-item-section>
-              <q-item-section>
-             Created User List
-              </q-item-section>
-            </q-item> -->
-
-         
           </q-list>
         </q-scroll-area>
       </q-drawer>
 
       <q-page-container>
-        <router-view/>
+        <router-view />
       </q-page-container>
     </q-layout>
   </div>
 </template>
 <style scoped>
-.active-class{
+.active-class {
   color: white;
 }
 .q-item {
@@ -118,7 +79,7 @@
 }
 
 .q-item:hover::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -129,7 +90,7 @@
 }
 
 .active-class::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -137,6 +98,37 @@
   width: 80%; /* Adjust the width as needed */
   height: 2px; /* Adjust the height as needed */
   background-color: #fff; /* Adjust the color as needed */
+}
+.q-item {
+  position: relative;
+}
+.q-hoverable {
+  transition: background-color 0.3s ease; /* Add a transition for a smoother effect */
+}
+.q-hoverable:hover {
+  background-color: rgb(28, 233, 226);
+}
+.q-item:hover::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%; /* Adjust the width as needed */
+  height: 2px; /* Adjust the height as needed */
+  background-color: rgb(255, 255, 255); /* Adjust the color as needed */
+  border-radius: 2px round;
+}
+
+.active-class::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background-color: #fff;
 }
 </style>
 
@@ -157,18 +149,18 @@ export default {
 
     // Use logOut method to dispatch the 'logoutAdmin' action and navigate to 'LoginPage'
     const logOut = () => {
-      // store.dispatch('logoutAdmin'); // Corrected action name
-      // Use router from the composition API instead of this.$router
-      // Import the router using the 'router' import
       router.push("/");
     };
-
+    const settingUser = () => {
+      router.push("/UserDashboard/SetNewPass");
+    };
     // Return the computed property and methods for use in the template
     return {
       adminLoggedIn,
       logOut,
       drawer,
       miniState,
+      settingUser,
     };
   },
 };

@@ -24,7 +24,7 @@
         </q-input>
         <q-input
           bottom-slots
-          v-model="newPassword"
+          v-model="password"
           label="Enter New Password"
           counter
           class="q-mb-md"
@@ -68,18 +68,19 @@
     </q-card>
   </div>
 </template>
+
 <script setup>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import instance from "../helper/http-config";
-import {useAppStore} from "../store/index";
+import { useAppStore } from "../store/index";
 // import { useRoute } from 'vue-router';
 
-const store=useAppStore();
+const store = useAppStore();
 
 const oldPassword = ref("");
 const confirmPassword = ref("");
-const newPassword = ref("");
+const password = ref("");
 const showPassword = ref(false);
 const $q = useQuasar();
 // const route = useRoute();
@@ -87,13 +88,13 @@ const $q = useQuasar();
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
-const resetForm=()=>{
- oldPassword.value = ref("");
- confirmPassword.value = ref("");
- newPassword.value = ref("");
-}
+const resetForm = () => {
+  oldPassword.value = ref("");
+  confirmPassword.value = ref("");
+  password.value = ref("");
+};
 const setPassword = async () => {
-  if (confirmPassword.value !== newPassword.value) {
+  if (confirmPassword.value !== password.value) {
     $q.notify({
       message: "Please verify confirm password.",
       color: "red",
@@ -102,7 +103,7 @@ const setPassword = async () => {
   } else if (
     oldPassword.value === null ||
     confirmPassword.value === null ||
-    newPassword.value === null
+    password.value === null
   ) {
     $q.notify({
       message: "Please fill all the fields.",
@@ -110,24 +111,23 @@ const setPassword = async () => {
       type: "warning",
     });
   } else {
-    const token=store.getToken()
+    const token = store.getToken();
     try {
       const response = await instance.post(
         `/change-password`,
         {
-
           oldPassword: oldPassword.value,
-          newPassword: newPassword.value,
+          password: password.value,
           confirmPassword: confirmPassword.value,
         },
-         {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      if (response.data.status=="Success") {
+      if (response.data.status == "Success") {
         $q.notify({
           message: "Password set successfully!",
           color: "blue",
@@ -142,7 +142,9 @@ const setPassword = async () => {
             type: "negative",
           });
         } else {
-          console.error("Password setting failed. Please check your credentials.");
+          console.error(
+            "Password setting failed. Please check your credentials."
+          );
         }
       }
     } catch (error) {

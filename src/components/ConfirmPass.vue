@@ -108,14 +108,13 @@ const setPassword = async () => {
       );
       // console.log('Response Data:', response.data[0].token);
 
-      if (response.data.status=='Success') {
-        
+      if (response.data.status == "Success") {
         $q.notify({
           message: "Password set succesfully!",
           color: "blue",
           type: "green",
         });
-        router.push('/');
+        router.push("/");
         // Check if the response indicates success, but not necessarily if credentials are correct
         // const token = response.data.token;
         // const token = response.data.data.token;
@@ -131,15 +130,12 @@ const setPassword = async () => {
             type: "negative",
           });
         } else {
-          
-             $q.notify({
-          message: "Invalid Credentials!",
-          color: "red",
-          type: "negative",
-        });
+          $q.notify({
+            message: "Invalid Credentials!",
+            color: "red",
+            type: "negative",
+          });
         }
-
-     
       }
     } catch (error) {
       // Handle different types of errors

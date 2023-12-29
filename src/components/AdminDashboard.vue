@@ -1,14 +1,12 @@
 <!-- AdminDashboard.vue -->
 <template>
-
   <!-- SideBar for quasar -->
-  <div class="q-lg ">
+  <div class="q-lg">
     <q-layout
       view="hHh Lpr lff"
       container
       style="height: 750px"
-      class="shadow-2 "
-      
+      class="shadow-2"
     >
       <q-header class="bg-indigo-1">
         <q-toolbar>
@@ -27,7 +25,7 @@
             />
           </q-avatar>
           <q-toolbar-title class="text-black">Hi Admin</q-toolbar-title>
-           <q-btn
+          <q-btn
             flat
             round
             dense
@@ -43,66 +41,66 @@
             @click="logOut"
             class="text-black"
           />
-         
         </q-toolbar>
       </q-header>
 
       <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="500">
         <q-scroll-area class="fit bg-indigo-10 rounded-borders mt-2 myClass">
           <q-list padding class="menu-list bg-indigo-10 q-mt-lg">
-            <q-item clickable v-ripple to="/AdminDashboard/CreateUser"   :active-class="'active-class'">
+            <q-item
+              clickable
+              v-ripple
+              to="/AdminDashboard/CreateUser"
+              :active-class="'active-class'"
+            >
               <q-item-section>
-                <q-icon
-                  name="create"
-                  color="white"
-
-                />
+                <q-icon name="create" color="white" />
+              </q-item-section>
+              <q-item-section class="text-white"> Create User </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-ripple
+              to="/AdminDashboard/CreatedList"
+              :active-class="'active-class'"
+            >
+              <q-item-section>
+                <q-icon name="table" color="white" />
+              </q-item-section>
+              <q-item-section class="text-white"> User List </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-ripple
+              to="/AdminDashboard/ActivityLogs"
+              :active-class="'active-class'"
+            >
+              <q-item-section>
+                <q-icon name="checklist" color="white" />
               </q-item-section>
               <q-item-section class="text-white">
-             Create User
+                Activity Logs
               </q-item-section>
             </q-item>
-            <q-item clickable v-ripple to="/AdminDashboard/CreatedList" :active-class="'active-class'">
+            <q-item
+              clickable
+              v-ripple
+              to="/AdminDashboard/UserList"
+              :active-class="'active-class'"
+            >
               <q-item-section>
-                <q-icon
-                  name="table"
-                  color="white"
-                />
+                <q-icon name="list" color="white" />
               </q-item-section>
               <q-item-section class="text-white">
-            User List 
+                Applicant List
               </q-item-section>
             </q-item>
-            <q-item clickable v-ripple to="/AdminDashboard/ActivityLogs" :active-class="'active-class'">
-              <q-item-section>
-                <q-icon
-                  name="checklist"
-                  color="white"
-                />
-              </q-item-section>
-              <q-item-section class="text-white">
-             ActivityLogs
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple to="/AdminDashboard/UserList" :active-class="'active-class'">
-              <q-item-section>
-                <q-icon
-                  name="list"
-                  color="white"
-                />
-              </q-item-section>
-              <q-item-section class="text-white">
-             ApplicantList
-              </q-item-section>
-            </q-item>
-
-         
           </q-list>
         </q-scroll-area>
       </q-drawer>
 
       <q-page-container>
-        <router-view/>
+        <router-view />
       </q-page-container>
     </q-layout>
   </div>
@@ -112,7 +110,7 @@
   margin-left: 2px;
   /* border-radius: 2px round;s */
 }
-.active-class{
+.active-class {
   color: white;
 }
 .q-item {
@@ -123,11 +121,9 @@
 }
 .q-hoverable:hover {
   background-color: rgb(28, 233, 226);
-
-  
 }
 .q-item:hover::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -139,15 +135,14 @@
 }
 
 .active-class::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%; 
-  height: 2px; 
-  background-color: #fff; 
-
+  width: 80%;
+  height: 2px;
+  background-color: #fff;
 }
 </style>
 
@@ -163,18 +158,17 @@ export default {
     const store = useAppStore();
     const drawer = ref(false);
     const miniState = ref(false);
-    const token=ref(false);
+    const token = ref(false);
     // Use computed to define adminLoggedIn as a computed property
     const adminLoggedIn = computed(() => store.adminLoggedIn);
-   
-    
+
     // Use logOut method to dispatch the 'logoutAdmin' action and navigate to 'LoginPage'
     const logOut = () => {
       // store.dispatch('logoutAdmin'); // Corrected action name
       // Use router from the composition API instead of this.$router
       // Import the router using the 'router' import
-       store.setToken(token.value);
-     router.push("/");
+      store.setToken(token.value);
+      router.push("/");
     };
 
     // Return the computed property and methods for use in the template

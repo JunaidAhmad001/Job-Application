@@ -51,7 +51,7 @@ const forgotPassword = async () => {
       color: "red",
       type: "negative",
     });
-    return; 
+    return;
   }
 
   // Add your logic for handling the forgot password submission
@@ -62,7 +62,7 @@ const forgotPassword = async () => {
 
     if (response.data.status === "Success") {
       $q.notify({
-        message: "Password sent successfully! Please check your email",
+        message: "Email sent successfully! Please check your email",
         color: "green",
         type: "positive",
       });
@@ -95,7 +95,6 @@ const forgotPassword = async () => {
 
   console.log("Forgot password submitted:", email.value);
 };
-
 </script>
 
 <style scoped>

@@ -24,6 +24,7 @@
               type="email"
               required
               placeholder="Enter your email"
+              :rules="[ val =>  val.includes('@') || '@ is missing']"
             />
           </q-card-section>
 
@@ -43,7 +44,9 @@
               label="CNIC"
               type="number"
               required
+              length
               placeholder="Enter your CNIC"
+              :rules="[ val => val && val.length == 13 || 'Cnic must be 13 digits']"
             />
           </q-card-section>
 
@@ -64,6 +67,7 @@
               type="tel"
               required
               placeholder="Enter your phone number"
+              :rules="[ val => val && val.length == 11 || 'Number must be 11 digits']"
             />
           </q-card-section>
 
@@ -81,7 +85,7 @@
 
           <q-card-section>
             <q-file v-model="user.cv" label="CV (PDF only)" />
-            <q-field-error v-if="cvError">{{ cvError }}</q-field-error>
+            <!-- <q-field-error v-if="cvError">{{ cvError }}</q-field-error> -->
           </q-card-section>
 
           <q-card-section>
@@ -168,21 +172,6 @@ const submitForm = async () => {
   } else {
     // Clear CV error if it was previously set
     cvError.value = null;
-
-    // Perform the rest of the form submission logic
-    // http://192.168.11.172:3000/submit-form
-    //    const isSubmitted = store.addUser({
-    //   id: generateUniqueId(),
-    //   userName: user.value.userName,
-    //   email: user.value.email,
-    //   qualification: user.value.qualification,
-    //   cnic: user.value.cnic,
-    //   address: user.value.address,
-    //   phoneNumber: user.value.phoneNumber,
-    //   age: user.value.age,
-    //   cv: user.value.cv,
-    // });
-    // Create a FormData object to send the file
     const formData = new FormData();
     formData.append("userName", user.value.userName);
     formData.append("email", user.value.email);
@@ -227,59 +216,6 @@ const submitForm = async () => {
     }
   }
 };
-
-//      const response=await instance.post("/submit-form",{
-//       userName: user.value.userName,
-//       email: user.value.email,
-//       qualification: user.value.qualification,
-//       cnic: user.value.cnic,
-//       address: user.value.address,
-//       phoneNumber: user.value.phoneNumber,
-//       age: user.value.age,
-//       cv: user.value.cv,
-//      })
-//      if(response.data.status=='Success'){
-//       $q.notify({
-//       message: "Data saved sucessfully!.",
-//       color: "green",
-//       type: "green",
-//     });
-//      }
-//      else{
-//      $q.notify({
-//       message: response.error.error,
-//       color: "red",
-//       type: "negative",
-//     });
-//      }
-
-//     // const isSubmitted = store.addUser({
-//     //   id: generateUniqueId(),
-//     //   userName: user.value.userName,
-//     //   email: user.value.email,
-//     //   qualification: user.value.qualification,
-//     //   cnic: user.value.cnic,
-//     //   address: user.value.address,
-//     //   phoneNumber: user.value.phoneNumber,
-//     //   age: user.value.age,
-//     //   cv: user.value.cv,
-//     // });
-
-//     // if (isSubmitted) {
-//     //   $q.notify({
-//     //     message: "User added successfully",
-//     //     color: "purple",
-//     //     type: "positive",
-//     //   });
-//     //   resetForm();
-//     // }
-//   }
-// };
-// let idCounter = 0;
-// const generateUniqueId = () => {
-//   idCounter += 1;
-//   return idCounter;
-// };
 const resetForm = () => {
   // Reset form fields and state
   user.value = {

@@ -1,15 +1,15 @@
 <template>
-
-      
-    
   <div class="q-pa-md row items-start q-gutter-md login-page bg-grey-13">
     <!-- Image on the left -->
     <!-- <q-avatar class="q-ml-lg hidden-md-down">
       <img class="login-image" src="../assets/login.png"/>
       
     </q-avatar> -->
-    <q-card class="my-card rounded-borders bg-white inset-shadow-down" style="q-transparent">
-      <q-card-section class="bg-white text-indigo ">
+    <q-card
+      class="my-card rounded-borders bg-white inset-shadow-down"
+      style="q-transparent"
+    >
+      <q-card-section class="bg-white text-indigo">
         <div class="text-h6 text-bold">Login</div>
       </q-card-section>
 
@@ -19,9 +19,9 @@
             bottom-slots
             v-model="email"
             label="Enter Email"
-            counter
             class="q-mb-md"
             style="width: 100%"
+            :rules="[ val =>  val.includes('@') || '@ is missing']"
           >
             <template v-slot:prepend>
               <q-icon name="email" class="text-indigo q-ml-md" />
@@ -41,26 +41,26 @@
             </template>
           </q-input> -->
           <q-input
-  bottom-slots
-  v-model="password"
-  label="Enter Password"
-  counter
-  class="q-mb-md"
-  style="width: 100%"
-  :type="showPassword ? 'text' : 'password'" 
->
-  <template v-slot:prepend>
-    <q-icon name="password" class="text-indigo q-ml-md" />
-  </template>
+            bottom-slots
+            v-model="password"
+            label="Enter Password"
+            class="q-mb-md"
+            style="width: 100%"
+            :rules="['Password contains atleast 8 characters']"
+            :type="showPassword ? 'text' : 'password'"
+          >
+            <template v-slot:prepend>
+              <q-icon name="password" class="text-indigo q-ml-md" />
+            </template>
 
-  <template v-slot:append>
-    <q-icon
-      :name="showPassword ? 'visibility_off' : 'visibility'"
-      @click="togglePasswordVisibility"
-      class="cursor-pointer q-ml-md"
-    />
-  </template>
-</q-input>
+            <template v-slot:append>
+              <q-icon
+                :name="showPassword ? 'visibility_off' : 'visibility'"
+                @click="togglePasswordVisibility"
+                class="cursor-pointer q-ml-md"
+              />
+            </template>
+          </q-input>
           <q-btn
             label="Login"
             type="submit"
@@ -97,8 +97,6 @@ const togglePasswordVisibility = () => {
 };
 
 const login = async () => {
-
-
   // Check if email and password are not empty
   if (!email.value || !password.value) {
     $q.notify({
@@ -125,7 +123,7 @@ const login = async () => {
       const token = response.data.data.token;
       // console.log(token);
       store.setToken(token);
-    //  console.log(token);
+      //  console.log(token);
       const isAdmin = response.data.data.user.isAdmin;
       console.log(isAdmin);
       if (isAdmin) {
@@ -143,14 +141,6 @@ const login = async () => {
         });
         router.push("/UserDashboard");
       }
-      // Successful login for a user with correct credentials
-      // console.log("Successful login for a user with correct credentials");
-      // $q.notify({
-      //   message: "Logged in Successfully!",
-      //   color: "blue",
-      //   type: "positive",
-      // });
-      // router.push("/AdminDashboard");
     } else {
       // Provide more specific feedback to the user
       if (response && response.data.error) {
@@ -174,19 +164,16 @@ const login = async () => {
     // Handle different types of errors
     console.error("Login failed:", error.message);
     $q.notify({
-      message: error.message,
+      message: "Invalid Crendentials!",
       color: "red",
       type: "negative",
     });
   }
 };
-// const toCvPage=()=>{
-//   // Navigate to the forgot password page
-//   router.push("/ApplicantForm")
-// }
+
 const toForgotPage = () => {
   // Navigate to the forgot password page
-  router.push("/ForgotPage"); 
+  router.push("/ForgotPage");
 };
 </script>
 
